@@ -10,7 +10,7 @@ public class DesktopLauncher {
         config.setForegroundFPS(60);
         config.useVsync(true);
 
-        config.setWindowedMode(1000,937);
+        config.setWindowedMode(1117,1015);
         config.setTitle("Software_2");
         new Lwjgl3Application(new Boot(), config);
     }

@@ -29,6 +29,7 @@ public class GameScreen extends ScreenAdapter {
     private HexGrid hexGrid;
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
+    private Atom atom;
 
     public GameScreen(OrthographicCamera cam) {
         this.camera = cam;
@@ -38,6 +39,14 @@ public class GameScreen extends ScreenAdapter {
 
         // Initialize the hex grid
         hexGrid = new HexGrid();
+        atom = new Atom(new Texture("D:\\Software Enj 2\\test\\desktop\\src\\Innercore\\atom.png"), 100); // Adjust size and texture as needed
+//        Vector2 randomHexPosition = hexGrid.getRandomHexagonPosition();
+//        atom.setPosition(randomHexPosition);
+        float centerX = Gdx.graphics.getWidth() / 2f;
+        float centerY = Gdx.graphics.getHeight() / 2f;
+
+        // Set the position of the atom to the center position
+        atom.setPosition(new Vector2(centerX, centerY));
     }
 
     private void update() {
@@ -62,13 +71,25 @@ public class GameScreen extends ScreenAdapter {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
+//        batch.begin();
         // Render the hex grid
+
         hexGrid.render(batch);
 
+        atom.render(batch);
+
+        // Render the atom
+
+
         batch.end();
+
+//        batch.end();
 
         // Render the Box2D debug renderer
         box2DDebugRenderer.render(world, camera.combined);
     }
+
+
+
 }
 

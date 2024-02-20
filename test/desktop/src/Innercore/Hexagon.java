@@ -19,4 +19,7 @@ public class Hexagon {
         batch.draw(texture, position.x, position.y);
     }
 
+    public Vector2 getPosition() {
+        return position;
+    }
 }

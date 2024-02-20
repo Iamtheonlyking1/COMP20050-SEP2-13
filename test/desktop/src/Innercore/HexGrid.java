@@ -4,6 +4,7 @@ import Innercore.Hexagon;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 public class HexGrid {
@@ -40,6 +41,13 @@ public class HexGrid {
                 hexagon.render(batch);
             }
         }
+    }
+    public Vector2 getRandomHexagonPosition() {
+            int randomRow = MathUtils.random(hexagons.length - 1);
+            int randomCol = MathUtils.random(hexagons[randomRow].length - 1);
+
+            Hexagon hexagon = hexagons[randomRow][randomCol];
+            return hexagon.getPosition();
     }
 }
 
