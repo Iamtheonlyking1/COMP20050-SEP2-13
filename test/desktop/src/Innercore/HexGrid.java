@@ -22,7 +22,7 @@ public class HexGrid {
 
 
     public HexGrid() {
-        hexTexture = new Texture(Gdx.files.internal("D:\\Software Enj 2\\test\\desktop\\src\\Innercore\\hex_tex.png")); // Change the path to your hex texture
+        hexTexture = new Texture(Gdx.files.internal("C:\\Users\\harmi\\Desktop\\softy\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\hex_tex.png")); // Change the path to your hex texture
         hexagons = new Hexagon[10][10]; // Example: 10x10 grid
 
         float startX = 0; // Adjust as needed
@@ -52,16 +52,16 @@ public class HexGrid {
     public Vector2 getRandomHexagonPosition() {
        return new Vector2();
     }
-    public Vector2 calculateHexagonPosition(float row, float col) {
-        float offsetX = col * HORIZONTAL_SPACING;
-        float offsetY = row * VERTICAL_SPACING;
+    public Vector2 calculateHexagonPosition(double row, double col) {
+        double offsetX = col * HORIZONTAL_SPACING;
+        double offsetY = row * VERTICAL_SPACING;
 
         // For odd rows, shift hexagons half the width to the right
         if (row % 2 != 0) {
             offsetX += HORIZONTAL_SPACING / 2;
         }
 
-        return new Vector2(offsetX, offsetY);
+        return new Vector2((float) offsetX, (float) offsetY);
     }
 }
 
