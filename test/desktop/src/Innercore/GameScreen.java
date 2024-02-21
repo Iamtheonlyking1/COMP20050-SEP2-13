@@ -30,6 +30,7 @@ public class GameScreen extends ScreenAdapter {
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
     private Atom atom;
+    private Circle_of_influence CIF;
 
     public GameScreen(OrthographicCamera cam) {
         this.camera = cam;
@@ -40,13 +41,20 @@ public class GameScreen extends ScreenAdapter {
         // Initialize the hex grid
         hexGrid = new HexGrid();
         atom = new Atom(new Texture("D:\\Software Enj 2\\test\\desktop\\src\\Innercore\\atom.png"), 100); // Adjust size and texture as needed
-//        Vector2 randomHexPosition = hexGrid.getRandomHexagonPosition();
+        CIF= new Circle_of_influence(new Texture("D:\\Software Enj 2\\test\\desktop\\src\\Innercore\\pngwing.com.png"));
+        Vector2 randomHexPosition = hexGrid.calculateHexagonPosition(7.5f,24.25f);
 //        atom.setPosition(randomHexPosition);
+
+        //5,55->rows
+        //22,55
         float centerX = Gdx.graphics.getWidth() / 2f;
         float centerY = Gdx.graphics.getHeight() / 2f;
-
+//        System.out.println(centerX);
+//        System.out.println(centerY);
         // Set the position of the atom to the center position
-        atom.setPosition(new Vector2(centerX, centerY));
+        atom.setPosition(randomHexPosition);
+        CIF.setPosition(atom);
+//        System.out.println(randomHexPosition);
     }
 
     private void update() {
@@ -77,6 +85,8 @@ public class GameScreen extends ScreenAdapter {
         hexGrid.render(batch);
 
         atom.render(batch);
+
+        CIF.render(batch);
 
         // Render the atom
 

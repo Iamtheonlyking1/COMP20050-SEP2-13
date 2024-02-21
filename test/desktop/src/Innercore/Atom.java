@@ -18,6 +18,14 @@ public class Atom {
         this.position = position;
     }
 
+    public float getSize() {
+        return size;
+    }
+
+    public Vector2 getPosition() {
+        return position;
+    }
+
     public void render(SpriteBatch batch) {
         batch.draw(texture, position.x - size / 2, position.y - size / 2, size, size);
     }

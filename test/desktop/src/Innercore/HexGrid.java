@@ -13,6 +13,13 @@ public class HexGrid {
 
     private Texture hexTexture;
     private Hexagon[][] hexagons;
+    private static final float HEX_WIDTH = 30;  // Adjust as needed
+    private static final float HEX_HEIGHT = 30; // Adjust as needed
+
+    // Constants defining the horizontal and vertical spacing between hexagons
+    private static final float HORIZONTAL_SPACING = HEX_WIDTH * 3 / 4;
+    private static final float VERTICAL_SPACING = HEX_HEIGHT * (float) Math.sqrt(3) / 2;
+
 
     public HexGrid() {
         hexTexture = new Texture(Gdx.files.internal("D:\\Software Enj 2\\test\\desktop\\src\\Innercore\\hex_tex.png")); // Change the path to your hex texture
@@ -43,11 +50,18 @@ public class HexGrid {
         }
     }
     public Vector2 getRandomHexagonPosition() {
-            int randomRow = MathUtils.random(hexagons.length - 1);
-            int randomCol = MathUtils.random(hexagons[randomRow].length - 1);
+       return new Vector2();
+    }
+    public Vector2 calculateHexagonPosition(float row, float col) {
+        float offsetX = col * HORIZONTAL_SPACING;
+        float offsetY = row * VERTICAL_SPACING;
 
-            Hexagon hexagon = hexagons[randomRow][randomCol];
-            return hexagon.getPosition();
+        // For odd rows, shift hexagons half the width to the right
+        if (row % 2 != 0) {
+            offsetX += HORIZONTAL_SPACING / 2;
+        }
+
+        return new Vector2(offsetX, offsetY);
     }
 }
 
