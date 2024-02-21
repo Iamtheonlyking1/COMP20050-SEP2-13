@@ -21,6 +21,8 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import java.util.Random;
+
 import static helper.Constants.PPM;
 
 public class GameScreen extends ScreenAdapter {
@@ -29,8 +31,11 @@ public class GameScreen extends ScreenAdapter {
     private HexGrid hexGrid;
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
-    private Atom atom,atom2;
-    private Circle_of_influence CIF;
+    private Atom atom,atom_2,atom_3,atom_4,atom_5,atom_6;
+    private Circle_of_influence CIF,CIF_2,CIF_3,CIF_4,CIF_5,CIF_6;
+    private Atom[] atoms=new Atom[6];
+    private Circle_of_influence[] CIFs=new Circle_of_influence[6];
+
 
     public GameScreen(OrthographicCamera cam) {
         this.camera = cam;
@@ -40,9 +45,35 @@ public class GameScreen extends ScreenAdapter {
 
         // Initialize the hex grid
         hexGrid = new HexGrid();
-        atom = new Atom(new Texture("C:\\Users\\harmi\\Desktop\\softy\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\atom.png"), 100); // Adjust size and texture as needed
-        CIF= new Circle_of_influence(new Texture("C:\\Users\\harmi\\Desktop\\softy\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\pngwing.com.png"));
-        Vector2 randomHexPosition = hexGrid.calculateHexagonPosition(10.5,22.25);
+        atom = new Atom(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\atom.png"), 100); // Adjust size and texture as needed
+        CIF= new Circle_of_influence(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\pngwing.com.png"));
+        atom_2 = new Atom(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\atom.png"), 100); // Adjust size and texture as needed
+        CIF_2 = new Circle_of_influence(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\pngwing.com.png"));
+        atom_3 = new Atom(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\atom.png"), 100); // Adjust size and texture as needed
+        CIF_3= new Circle_of_influence(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\pngwing.com.png"));
+        atom_4 = new Atom(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\atom.png"), 100); // Adjust size and texture as needed
+        CIF_4= new Circle_of_influence(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\pngwing.com.png"));
+        atom_5 = new Atom(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\atom.png"), 100); // Adjust size and texture as needed
+        CIF_5= new Circle_of_influence(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\pngwing.com.png"));
+        atom_6 = new Atom(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\atom.png"), 100); // Adjust size and texture as needed
+        CIF_6= new Circle_of_influence(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\pngwing.com.png"));
+
+
+        atoms[0]=atom;
+        atoms[1]=atom_2;
+        atoms[2]=atom_3;
+        atoms[3]=atom_4;
+        atoms[4]=atom_5;
+        atoms[5]=atom_6;
+
+
+        CIFs[0]=CIF;
+        CIFs[1]=CIF_2;
+        CIFs[2]=CIF_3;
+        CIFs[3]=CIF_4;
+        CIFs[4]=CIF_5;
+        CIFs[5]=CIF_6;
+
 //        atom.setPosition(randomHexPosition);
 
 
@@ -50,8 +81,7 @@ public class GameScreen extends ScreenAdapter {
         float centerY = Gdx.graphics.getHeight() / 2f;
 
         // Set the position of the atom to the center position
-        atom.setPosition(randomHexPosition);
-        CIF.setPosition(atom);
+
 //        System.out.println(randomHexPosition);
 
         double[][] coordinates = new double[91][2];
@@ -237,9 +267,19 @@ public class GameScreen extends ScreenAdapter {
         coordinates[89][1] = 30.25;
         coordinates[90][0] = 4.25;
         coordinates[90][1] = 34.25;
+        Random rand = new Random();
+        for(int i=0;i<6;i++){
+            int Random_Coordinate=rand.nextInt(91);
+
+            Vector2 randomHexPosition = hexGrid.calculateHexagonPosition(coordinates[Random_Coordinate][0],coordinates[Random_Coordinate][1]);
+            atoms[i].setPosition(randomHexPosition);
+            CIFs[i].setPosition(atoms[i]);
+
+        }
 
 
     }
+
 
     private void update() {
         world.step(1 / 60f, 6, 2);
@@ -268,9 +308,10 @@ public class GameScreen extends ScreenAdapter {
 
         hexGrid.render(batch);
 
-        atom.render(batch);
-
-        CIF.render(batch);
+       for(int i=0;i<6;i++){
+           atoms[i].render(batch);
+           CIFs[i].render(batch);
+       }
 
         // Render the atom
 
