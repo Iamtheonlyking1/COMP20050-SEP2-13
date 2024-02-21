@@ -36,28 +36,14 @@ public class GameScreen extends ScreenAdapter {
     private Atom[] atoms=new Atom[6];
     private Circle_of_influence[] CIFs=new Circle_of_influence[6];
 
+    private int[] Random_Coordinate = new int[6];
+
 
     public GameScreen(OrthographicCamera cam) {
         this.camera = cam;
         this.batch = new SpriteBatch();
         this.box2DDebugRenderer = new Box2DDebugRenderer();
         this.world = new World(new Vector2(0, 0), false);
-
-        // Initialize the hex grid
-        hexGrid = new HexGrid();
-        atom = new Atom(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\atom.png"), 100); // Adjust size and texture as needed
-        CIF= new Circle_of_influence(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\pngwing.com.png"));
-        atom_2 = new Atom(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\atom.png"), 100); // Adjust size and texture as needed
-        CIF_2 = new Circle_of_influence(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\pngwing.com.png"));
-        atom_3 = new Atom(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\atom.png"), 100); // Adjust size and texture as needed
-        CIF_3= new Circle_of_influence(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\pngwing.com.png"));
-        atom_4 = new Atom(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\atom.png"), 100); // Adjust size and texture as needed
-        CIF_4= new Circle_of_influence(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\pngwing.com.png"));
-        atom_5 = new Atom(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\atom.png"), 100); // Adjust size and texture as needed
-        CIF_5= new Circle_of_influence(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\pngwing.com.png"));
-        atom_6 = new Atom(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\atom.png"), 100); // Adjust size and texture as needed
-        CIF_6= new Circle_of_influence(new Texture("D:\\Software Enj 2\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\pngwing.com.png"));
-
 
         atoms[0]=atom;
         atoms[1]=atom_2;
@@ -73,6 +59,14 @@ public class GameScreen extends ScreenAdapter {
         CIFs[3]=CIF_4;
         CIFs[4]=CIF_5;
         CIFs[5]=CIF_6;
+
+        // Initialize the hex grid
+        hexGrid = new HexGrid();
+        for(int i = 0;i<6;i++) {
+            atoms[i] = new Atom(new Texture("C:\\Users\\harmi\\Desktop\\softy\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\atom.png"), 100); // Adjust size and texture as needed
+            CIFs[i]= new Circle_of_influence(new Texture("C:\\Users\\harmi\\Desktop\\softy\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\pngwing.com.png"));
+
+        }
 
 //        atom.setPosition(randomHexPosition);
 
@@ -267,13 +261,19 @@ public class GameScreen extends ScreenAdapter {
         coordinates[89][1] = 30.25;
         coordinates[90][0] = 4.25;
         coordinates[90][1] = 34.25;
-        Random rand = new Random();
-        for(int i=0;i<6;i++){
-            int Random_Coordinate=rand.nextInt(91);
 
-            Vector2 randomHexPosition = hexGrid.calculateHexagonPosition(coordinates[Random_Coordinate][0],coordinates[Random_Coordinate][1]);
-            atoms[i].setPosition(randomHexPosition);
-            CIFs[i].setPosition(atoms[i]);
+
+        Random rand = new Random();
+
+        for(int i=0;i<6;i++){
+            Random_Coordinate[i]=rand.nextInt(91);
+            if(i >0 &&Random_Coordinate[i] == Random_Coordinate[i-1]) {
+                Random_Coordinate[i]=rand.nextInt(91);
+            } else {
+                Vector2 randomHexPosition = hexGrid.calculateHexagonPosition(coordinates[Random_Coordinate[i]][0], coordinates[Random_Coordinate[i]][1]);
+                atoms[i].setPosition(randomHexPosition);
+                CIFs[i].setPosition(atoms[i]);
+            }
 
         }
 
