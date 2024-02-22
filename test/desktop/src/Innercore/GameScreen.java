@@ -96,7 +96,7 @@ public class GameScreen extends ScreenAdapter {
         coordinates[7][0] = 32.75;
         coordinates[7][1] = 16.25;
         coordinates[8][0] = 32.75;
-        coordinates[9][1] = 20.25;
+        coordinates[8][1] = 20.25;
         coordinates[9][0] = 32.75;
         coordinates[9][1] = 24.25;
         coordinates[10][0] = 32.75;
@@ -267,18 +267,20 @@ public class GameScreen extends ScreenAdapter {
 
         for(int i=0;i<6;i++){
             Random_Coordinate[i]=rand.nextInt(91);
-            if(i >0 &&Random_Coordinate[i] == Random_Coordinate[i-1]) {
-                Random_Coordinate[i]=rand.nextInt(91);
-            } else {
-                Vector2 randomHexPosition = hexGrid.calculateHexagonPosition(coordinates[Random_Coordinate[i]][0], coordinates[Random_Coordinate[i]][1]);
-                atoms[i].setPosition(randomHexPosition);
-                CIFs[i].setPosition(atoms[i]);
+            for(int j = 0;j<i;j++) {
+                if (Random_Coordinate[i] == Random_Coordinate[j]) {
+                    Random_Coordinate[i] = rand.nextInt(91);
+                }
+            }
+                    Vector2 randomHexPosition = hexGrid.calculateHexagonPosition(coordinates[Random_Coordinate[i]][0], coordinates[Random_Coordinate[i]][1]);
+                    atoms[i].setPosition(randomHexPosition);
+                    CIFs[i].setPosition(atoms[i]);
             }
 
         }
 
 
-    }
+
 
 
     private void update() {
