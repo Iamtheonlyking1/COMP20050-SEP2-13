@@ -63,8 +63,8 @@ public class GameScreen extends ScreenAdapter {
         // Initialize the hex grid
         hexGrid = new HexGrid();
         for(int i = 0;i<6;i++) {
-            atoms[i] = new Atom(new Texture("C:\\Users\\harmi\\Desktop\\softy\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\atom.png"), 100); // Adjust size and texture as needed
-            CIFs[i]= new Circle_of_influence(new Texture("C:\\Users\\harmi\\Desktop\\softy\\COMP20050-SEP2-13\\test\\desktop\\src\\Innercore\\pngwing.com.png"));
+            atoms[i] = new Atom(new Texture("atom.png"), 100); // Adjust size and texture as needed
+            CIFs[i]= new Circle_of_influence(new Texture("pngwing.com.png"));
 
         }
 
