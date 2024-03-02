@@ -22,7 +22,7 @@ public class HexGrid {
 
 
     public HexGrid() {
-        hexTexture = new Texture(Gdx.files.internal("hex_tex.png")); // Change the path to your hex texture
+        hexTexture = new Texture(Gdx.files.internal("hex_new.png")); // Change the path to your hex texture
         hexagons = new Hexagon[10][10]; // Example: 10x10 grid
 
         float startX = 0; // Adjust as needed
