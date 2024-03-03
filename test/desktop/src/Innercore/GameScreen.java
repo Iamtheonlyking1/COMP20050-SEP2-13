@@ -20,6 +20,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.Random;
 
@@ -29,6 +36,7 @@ public class GameScreen extends ScreenAdapter {
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private HexGrid hexGrid;
+//    private Button button;
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
     private Atom atom,atom_2,atom_3,atom_4,atom_5,atom_6;
@@ -36,13 +44,43 @@ public class GameScreen extends ScreenAdapter {
     private Atom[] atoms=new Atom[6];
     private Circle_of_influence[] CIFs=new Circle_of_influence[6];
     private int[] Random_Coordinate = new int[6];
-
+//    private SpriteBatch batch;
+    private Texture img;
+    private Stage stage;
+    private  boolean render_atoms;
 
     public GameScreen(OrthographicCamera cam) {
         this.camera = cam;
         this.batch = new SpriteBatch();
         this.box2DDebugRenderer = new Box2DDebugRenderer();
         this.world = new World(new Vector2(0, 0), false);
+
+        batch = new SpriteBatch();
+//        img = new Texture("button.png");
+
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
+
+        // Create an image button
+        Texture buttonTexture = new Texture("button.png");
+        TextureRegion buttonRegion = new TextureRegion(buttonTexture);
+        Drawable buttonDrawable = new TextureRegionDrawable(buttonRegion);
+        ImageButton button = new ImageButton(buttonDrawable);
+
+        // Set the position of the button
+        button.setPosition(0,0);
+
+        // Add a click listener to the button
+        button.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // This function will be executed when the button is clicked
+                render_atoms = true;
+            }
+        });
+
+        // Add the button to the stage
+        stage.addActor(button);
 
         atoms[0]=atom;
         atoms[1]=atom_2;
@@ -238,20 +276,31 @@ public class GameScreen extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+        hexGrid.render(batch);
+//        batch.draw(img, 0, 0);
 
         // Render the hex grid
-        hexGrid.render(batch);
-
-       for(int i=0;i<6;i++){
-           atoms[i].render(batch);
-           CIFs[i].render(batch);
-       }
+        if(render_atoms){
+            renderGameBoard();
+        }
 
         // Render the atom
         batch.end();
+        stage.act();
+        stage.draw();
 
         // Render the Box2D debug renderer
         box2DDebugRenderer.render(world, camera.combined);
+    }
+    private void renderGameBoard() {
+
+
+
+        for(int i=0;i<6;i++){
+            atoms[i].render(batch);
+            CIFs[i].render(batch);
+        }
+
     }
 }
 
