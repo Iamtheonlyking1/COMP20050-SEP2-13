@@ -48,6 +48,7 @@ public class GameScreen extends ScreenAdapter {
     private Texture img;
     private Stage stage;
     private  boolean render_atoms;
+    private  double[][] coordinates = new double[61][2];
 
     public GameScreen(OrthographicCamera cam) {
         this.camera = cam;
@@ -75,8 +76,10 @@ public class GameScreen extends ScreenAdapter {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 // This function will be executed when the button is clicked
-                render_atoms = true;
+                render_atoms = !render_atoms;
             }
+
+
         });
 
         // Add the button to the stage
@@ -114,7 +117,7 @@ public class GameScreen extends ScreenAdapter {
         // Set the position of the atom to the center position
 //        System.out.println(randomHexPosition);
 
-        double[][] coordinates = new double[61][2];
+
 
         coordinates[0][0] = 32.75;
         coordinates[0][1] = 16.25;
