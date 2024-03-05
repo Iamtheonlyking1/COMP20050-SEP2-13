@@ -47,8 +47,9 @@ public class GameScreen extends ScreenAdapter {
 //    private SpriteBatch batch;
     private Texture img;
     private Stage stage;
-    private  boolean render_atoms;
-    private  double[][] coordinates = new double[61][2];
+    private boolean render_atoms;
+    private double[][] coordinates = new double[61][2];
+    private double[][] edges = new double[54][2];
 
     public GameScreen(OrthographicCamera cam) {
         this.camera = cam;
@@ -242,6 +243,115 @@ public class GameScreen extends ScreenAdapter {
         coordinates[60][0] = 7.5;
         coordinates[60][1] = 32.25;
 
+        edges[0][0] = 34.25;
+        edges[0][1] = 15.25;
+        edges[1][0] = 32.75;
+        edges[1][1] = 14.25;
+        edges[2][0] = 31;
+        edges[2][1] = 13.25;
+        edges[3][0] = 29.75;
+        edges[3][1] = 12.25;
+        edges[4][0] = 27.75;
+        edges[4][1] = 11.25;
+        edges[5][0] = 26.5;
+        edges[5][1] = 10.25;
+        edges[6][0] = 24.75;
+        edges[6][1] = 9.25;
+        edges[7][0] = 23.25;
+        edges[7][1] = 8.25;
+        edges[8][0] = 21.75;
+        edges[8][1] = 7.25;
+        edges[9][0] = 20.25;
+        edges[9][1] = 6.25;
+        edges[10][0] = 18.5;
+        edges[10][1] = 7.25;
+        edges[11][0] = 17;
+        edges[11][1] = 8.25;
+        edges[12][0] = 15.25;
+        edges[12][1] = 9.25;
+        edges[13][0] = 13.75;
+        edges[13][1] = 10.25;
+        edges[14][0] = 12.25;
+        edges[14][1] = 11.25;
+        edges[15][0] = 10.5;
+        edges[15][1] = 12.25;
+        edges[16][0] = 9;
+        edges[16][1] = 13.25;
+        edges[17][0] = 7.5;
+        edges[17][1] = 14.25;
+        edges[18][0] = 5.75;
+        edges[18][1] = 15.25;
+        edges[19][0] = 5.75;
+        edges[19][1] = 17.25;
+        edges[20][0] = 5.75;
+        edges[20][1] = 19.25;
+        edges[21][0] = 5.75;
+        edges[21][1] = 21.25;
+        edges[22][0] = 5.75;
+        edges[22][1] = 23.25;
+        edges[23][0] = 5.75;
+        edges[23][1] = 25.25;
+        edges[24][0] = 5.75;
+        edges[24][1] = 27.25;
+        edges[25][0] = 5.75;
+        edges[25][1] = 29.25;
+        edges[26][0] = 5.75;
+        edges[26][1] = 31.25;
+        edges[27][0] = 5.75;
+        edges[27][1] = 33.25;
+        edges[28][0] = 7.5;
+        edges[28][1] = 34.25;
+        edges[29][0] = 9;
+        edges[29][1] = 35.25;
+        edges[30][0] = 10.5;
+        edges[30][1] = 36.25;
+        edges[31][0] = 12.25;
+        edges[31][1] = 37.25;
+        edges[32][0] = 13.75;
+        edges[32][1] = 38.25;
+        edges[33][0] = 15.25;
+        edges[33][1] = 39.25;
+        edges[34][0] = 17;
+        edges[34][1] = 40.25;
+        edges[35][0] = 18.5;
+        edges[35][1] = 41.25;
+        edges[36][0] = 20.25;
+        edges[36][1] = 42.25;
+        edges[37][0] = 21.75;
+        edges[37][1] = 41.25;
+        edges[38][0] = 23.25;
+        edges[38][1] = 40.25;
+        edges[39][0] = 24.75;
+        edges[39][1] = 39.25;
+        edges[40][0] = 26.5;
+        edges[40][1] = 38.25;
+        edges[41][0] = 27.75;
+        edges[41][1] = 37.25;
+        edges[42][0] = 29.5;
+        edges[42][1] = 36.25;
+        edges[43][0] = 31;
+        edges[43][1] = 35.25;
+        edges[44][0] = 32.75;
+        edges[44][1] = 34.25;
+        edges[45][0] = 34.25;
+        edges[45][1] = 33.25;
+        edges[46][0] = 34.25;
+        edges[46][1] = 31.25;
+        edges[47][0] = 34.25;
+        edges[47][1] = 29.25;
+        edges[48][0] = 34.25;
+        edges[48][1] = 27.25;
+        edges[49][0] = 34.25;
+        edges[49][1] = 25.25;
+        edges[50][0] = 34.25;
+        edges[50][1] = 23.25;
+        edges[51][0] = 34.25;
+        edges[51][1] = 21.25;
+        edges[52][0] = 34.25;
+        edges[52][1] = 19.25;
+        edges[53][0] = 34.25;
+        edges[53][1] = 17.25;
+
         Random rand = new Random();
 
         for(int i=0;i<6;i++){
@@ -255,6 +365,10 @@ public class GameScreen extends ScreenAdapter {
                     atoms[i].setPosition(randomHexPosition);
                     CIFs[i].setPosition(atoms[i]);
             }
+
+//        Vector2 randomHexPosition = hexGrid.calculateHexagonPosition(34.25,23.25);
+//        atoms[0].setPosition(randomHexPosition);
+//        CIFs[0].setPosition(atoms[0]);
         }
 
 
@@ -303,6 +417,9 @@ public class GameScreen extends ScreenAdapter {
             atoms[i].render(batch);
             CIFs[i].render(batch);
         }
+
+//        atoms[0].render(batch);
+//        CIFs[0].render(batch);
 
     }
 }
