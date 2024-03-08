@@ -22,12 +22,17 @@ import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import javax.swing.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 import static helper.Constants.PPM;
@@ -47,15 +52,28 @@ public class GameScreen extends ScreenAdapter {
 //    private SpriteBatch batch;
     private Texture img;
     private Stage stage;
-    private boolean render_atoms;
-    private double[][] coordinates = new double[61][2];
+    private  boolean render_atoms;
+    private  double[][] coordinates = new double[61][2];
     private double[][] edges = new double[54][2];
+    private ray lineRenderer;
+    private TextureAnalyzer textureAnalyzer;
+    private Stage stage2;
+    private Skin skin;
+    private ArrayList<Integer> Dialog_Input= new ArrayList<>();
+    private ShapeRenderer shapeRenderer;
+    private int[][] straightline_pairs= new int[27][2];
+    private boolean deflecting;
+
+    private Vector2 deflectionPoint;
 
     public GameScreen(OrthographicCamera cam) {
         this.camera = cam;
         this.batch = new SpriteBatch();
         this.box2DDebugRenderer = new Box2DDebugRenderer();
         this.world = new World(new Vector2(0, 0), false);
+        lineRenderer = new ray();
+
+
 
         batch = new SpriteBatch();
 //        img = new Texture("button.png");
@@ -85,7 +103,7 @@ public class GameScreen extends ScreenAdapter {
 
         // Add the button to the stage
         stage.addActor(button);
-
+        //atoms initiation
         atoms[0]=atom;
         atoms[1]=atom_2;
         atoms[2]=atom_3;
@@ -93,7 +111,7 @@ public class GameScreen extends ScreenAdapter {
         atoms[4]=atom_5;
         atoms[5]=atom_6;
 
-
+//circle of influence initiation
         CIFs[0]=CIF;
         CIFs[1]=CIF_2;
         CIFs[2]=CIF_3;
@@ -109,17 +127,14 @@ public class GameScreen extends ScreenAdapter {
 
         }
 
-//        atom.setPosition(randomHexPosition);
 
 
         float centerX = Gdx.graphics.getWidth() / 2f;
         float centerY = Gdx.graphics.getHeight() / 2f;
 
-        // Set the position of the atom to the center position
-//        System.out.println(randomHexPosition);
 
 
-
+//coordinates for hexagons
         coordinates[0][0] = 32.75;
         coordinates[0][1] = 16.25;
         coordinates[1][0] = 32.75;
@@ -243,6 +258,8 @@ public class GameScreen extends ScreenAdapter {
         coordinates[60][0] = 7.5;
         coordinates[60][1] = 32.25;
 
+
+//coordinates for every side of hexagons
         edges[0][0] = 34.25;
         edges[0][1] = 15.25;
         edges[1][0] = 32.75;
@@ -352,8 +369,64 @@ public class GameScreen extends ScreenAdapter {
         edges[53][0] = 34.25;
         edges[53][1] = 17.25;
 
-        Random rand = new Random();
 
+        straightline_pairs[0][0]=1;
+        straightline_pairs[0][1]=28;
+        straightline_pairs[1][0]=3;
+        straightline_pairs[1][1]=26;
+        straightline_pairs[2][0]=5;
+        straightline_pairs[2][1]=24;
+        straightline_pairs[3][0]=7;
+        straightline_pairs[3][1]=22;
+        straightline_pairs[4][0]=9;
+        straightline_pairs[4][1]=20;
+        straightline_pairs[5][0]=53;
+        straightline_pairs[5][1]=30;
+        straightline_pairs[6][0]=51;
+        straightline_pairs[6][1]=32;
+        straightline_pairs[7][0]=49;
+        straightline_pairs[7][1]=34;
+        straightline_pairs[8][0]=47;
+        straightline_pairs[8][1]=36;
+        straightline_pairs[9][0]=54;
+        straightline_pairs[9][1]=11;
+        straightline_pairs[10][0]=52;
+        straightline_pairs[10][1]=13;
+        straightline_pairs[11][0]=50;
+        straightline_pairs[11][1]=15;
+        straightline_pairs[12][0]=48;
+        straightline_pairs[12][1]=17;
+        straightline_pairs[13][0]=46;
+        straightline_pairs[13][1]=19;
+        straightline_pairs[14][0]=44;
+        straightline_pairs[14][1]=21;
+        straightline_pairs[15][0]=42;
+        straightline_pairs[15][1]=23;
+        straightline_pairs[16][0]=40;
+        straightline_pairs[16][1]=25;
+        straightline_pairs[17][0]=38;
+        straightline_pairs[17][1]=27;
+        straightline_pairs[18][0]=2;
+        straightline_pairs[18][1]=45;
+        straightline_pairs[19][0]=4;
+        straightline_pairs[19][1]=43;
+        straightline_pairs[20][0]=6;
+        straightline_pairs[20][1]=41;
+        straightline_pairs[21][0]=8;
+        straightline_pairs[21][1]=39;
+        straightline_pairs[22][0]=10;
+        straightline_pairs[22][1]=37;
+        straightline_pairs[23][0]=12;
+        straightline_pairs[23][1]=35;
+        straightline_pairs[24][0]=14;
+        straightline_pairs[24][1]=33;
+        straightline_pairs[25][0]=16;
+        straightline_pairs[25][1]=31;
+        straightline_pairs[26][0]=18;
+        straightline_pairs[26][1]=29;
+
+        Random rand = new Random();
+//randomly placing the atoms and circle of influnces arount the board
         for(int i=0;i<6;i++){
             Random_Coordinate[i]=rand.nextInt(61);
             for(int j = 0;j<i;j++) {
@@ -365,17 +438,40 @@ public class GameScreen extends ScreenAdapter {
                     atoms[i].setPosition(randomHexPosition);
                     CIFs[i].setPosition(atoms[i]);
             }
+        //dialog box
+        int choice = JOptionPane.YES_OPTION;
+        JTextField textField = new JTextField();
+        Object[] options = {"Input", "Stop"};
+        while(choice != JOptionPane.NO_OPTION) {
+        // Display the dialog box with input text field and custom buttons
+        choice = JOptionPane.showOptionDialog(
+                null,
+                textField,
+                "Input Dialog",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
+        // Process user's choice
 
-//        Vector2 randomHexPosition = hexGrid.calculateHexagonPosition(34.25,23.25);
-//        atoms[0].setPosition(randomHexPosition);
-//        CIFs[0].setPosition(atoms[0]);
+            if (choice == JOptionPane.YES_OPTION) {
+                String inputText = textField.getText();
+                Dialog_Input.add(Integer.parseInt(inputText));
+                Gdx.app.log("Dialog Box", "User clicked Input. Input: " + inputText);
+            } else if (choice == JOptionPane.NO_OPTION) {
+                Gdx.app.log("Dialog Box", "User clicked Stop.");
+            } else {
+                Gdx.app.log("Dialog Box", "User closed the dialog without clicking Input or Stop.");
+            }
+
+
         }
-
-
+    }
 
     private void update() {
         world.step(1 / 60f, 6, 2);
-
+//ESC button for exit app
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             Gdx.app.exit();
         }
@@ -384,43 +480,131 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
         this.update();
-//        camera.zoom=100.0f;
-//        camera.zoom=camera.far;
-
-
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         hexGrid.render(batch);
-//        batch.draw(img, 0, 0);
 
         // Render the hex grid
-        if(render_atoms){
+        if (render_atoms) {
+
             renderGameBoard();
+
         }
 
         // Render the atom
         batch.end();
+
         stage.act();
         stage.draw();
 
-        // Render the Box2D debug renderer
-        box2DDebugRenderer.render(world, camera.combined);
-    }
+        no_atom_encounter_absorbtion();
+
+            box2DDebugRenderer.render(world, camera.combined);
+        }
+
+
+
     private void renderGameBoard() {
-
-
-
         for(int i=0;i<6;i++){
             atoms[i].render(batch);
             CIFs[i].render(batch);
         }
-
-//        atoms[0].render(batch);
-//        CIFs[0].render(batch);
-
     }
+    public static int[] search2DArray(int[][] array, int target) {//searches the array for pairs
+        for (int i = 0; i < array.length; i++) {
+            if (array[i][1] == target) {
+                return new int[]{i, 1};
+            } else if (array[i][0] == target) {
+                return new int[]{i, 0};
+            }
+        }
+        return null;
+    }
+
+    private Vector2 calculateEndPoint(Vector2 startPoint, float angle, float distance) {//calculates end point after 60 degree deflection
+        float radAngle = (float) Math.toRadians(angle);
+        float x = startPoint.x + distance * (float) Math.cos(radAngle);
+        float y = startPoint.y + distance * (float) Math.sin(radAngle);
+        return new Vector2(x, y);
+    }
+    private void angle_60(){
+        Vector2 startPoint =  hexGrid.calculateHexagonPosition(23.5,22.25); // Example starting point
+        float angle = -60; // Example angle (in degrees)
+        Vector2 endPoint = calculateEndPoint(startPoint, angle, 200); // Calculate the endpoint
+
+        // Deflect the line
+        float dx = endPoint.x - startPoint.x;
+        float dy = endPoint.y - startPoint.y;
+        float length = (float) Math.sqrt(dx * dx + dy * dy);
+        float deflectAngle = (float) Math.toRadians(180-angle + 120); // Deflect by 60 degrees
+        endPoint.set(startPoint.x + length * (float) Math.cos(deflectAngle), startPoint.y + length * (float) Math.sin(deflectAngle));
+
+        // Draw the deflected lin
+    }
+    private void deflectLine(Vector2 startPoint, Vector2 endPoint, Vector2 deflectionPoint) {
+//        float angle = -60;
+        float dx = endPoint.x - startPoint.x;
+        float dy = endPoint.y - startPoint.y;
+        float length = (float) Math.sqrt(dx * dx + dy * dy);
+        float angle = (float) Math.atan2(dy, dx) + (float) Math.toRadians(60); // Deflect by 60 degrees
+        endPoint.set(deflectionPoint.x + length * (float) Math.cos(angle), deflectionPoint.y + length * (float) Math.sin(angle));
+
+        shapeRenderer.rectLine(startPoint, endPoint, 5);
+        shapeRenderer.end();
+    }
+
+    private void no_atom_encounter_absorbtion() {
+        deflectionPoint = hexGrid.calculateHexagonPosition(7.5, 16.25);
+        if (render_atoms) {
+            for (int i = 0; i < Dialog_Input.size(); i++) {
+                int[] index = search2DArray(straightline_pairs, Dialog_Input.get(i));
+                shapeRenderer = new ShapeRenderer();
+                shapeRenderer.setAutoShapeType(true);
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                shapeRenderer.setColor(1, 0, 0, 1); // Red line
+                shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
+                if (index[1] == 1) {
+                    if (!deflecting) {
+                        hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0] - 1][0], edges[straightline_pairs[index[0]][0] - 1][1]).x += 2; // Move the endpoint of the line horizontally
+                        if (hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0] - 1][0], edges[straightline_pairs[index[0]][0] - 1][1]).x >= deflectionPoint.x) {
+                            deflecting = true;
+//                            deflectLine(hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0]-1][0], edges[straightline_pairs[index[0]][0]-1][1]),hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1]-1][0], edges[straightline_pairs[index[0]][1]-1][1]));
+                        }
+                    } else {
+                        Vector2 startPoint = hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1] - 1][0], edges[straightline_pairs[index[0]][1] - 1][1]);
+                        Vector2 endPoint = hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0] - 1][0], edges[straightline_pairs[index[0]][0] - 1][1]);
+                        // Deflect the line
+                        angle_60();
+                    }
+
+
+                } else {
+
+//                shapeRenderer.rectLine(hexGrid.calculateHexagonPosition(edges[0][0], edges[0][1]), hexGrid.calculateHexagonPosition(edges[27][0], edges[27][1]), 5);
+//                shapeRenderer.end();
+                    if (!deflecting) {
+                        hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1] - 1][0], edges[straightline_pairs[index[0]][1] - 1][1]).x += 2; // Move the endpoint of the line horizontally
+                        if (hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1] - 1][0], edges[straightline_pairs[index[0]][1] - 1][1]).x >= deflectionPoint.x) {
+                            deflecting = true;
+//                            deflectLine(hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0]-1][0], edges[straightline_pairs[index[0]][0]-1][1]),hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1]-1][0], edges[straightline_pairs[index[0]][1]-1][1]));
+                        }
+                    } else {
+                        Vector2 startPoint = hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0] - 1][0], edges[straightline_pairs[index[0]][0] - 1][1]);
+                        Vector2 endPoint = hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1] - 1][0], edges[straightline_pairs[index[0]][1] - 1][1]);
+                        // Deflect the line
+                        angle_60();
+                    }
+
+                }
+
+            }
+        }
+    }
+
+
+
 }
 
