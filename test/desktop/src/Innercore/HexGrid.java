@@ -11,7 +11,7 @@ public class HexGrid {
 
     private static final float HEX_SIZE = 0; // Adjust the size of hexagons as needed
 
-    private Texture hexTexture;
+    public Texture hexTexture;
     private Hexagon[][] hexagons;
     private static final float HEX_WIDTH = 30;  // Adjust as needed
     private static final float HEX_HEIGHT = 30; // Adjust as needed

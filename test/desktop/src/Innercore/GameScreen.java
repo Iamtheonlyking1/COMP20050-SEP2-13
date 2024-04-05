@@ -10,12 +10,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.VertexArray;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Shape;
@@ -34,8 +37,11 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Vector;
 
 import static helper.Constants.PPM;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
 public class GameScreen extends ScreenAdapter {
     private OrthographicCamera camera;
@@ -47,7 +53,7 @@ public class GameScreen extends ScreenAdapter {
     private Atom atom,atom_2,atom_3,atom_4,atom_5,atom_6;
     private Circle_of_influence CIF,CIF_2,CIF_3,CIF_4,CIF_5,CIF_6;
     private Atom[] atoms=new Atom[6];
-    private Circle_of_influence[] CIFs=new Circle_of_influence[6];
+    private Circle[] CIFs=new Circle[6];
     private int[] Random_Coordinate = new int[6];
 //    private SpriteBatch batch;
     private Texture img;
@@ -63,8 +69,11 @@ public class GameScreen extends ScreenAdapter {
     private ShapeRenderer shapeRenderer;
     private int[][] straightline_pairs= new int[27][2];
     private boolean deflecting;
+    private Vector2[] linePt=new Vector2[2];
+
 
     private Vector2 deflectionPoint;
+    private Circle circle;
 
     public GameScreen(OrthographicCamera cam) {
         this.camera = cam;
@@ -112,18 +121,18 @@ public class GameScreen extends ScreenAdapter {
         atoms[5]=atom_6;
 
 //circle of influence initiation
-        CIFs[0]=CIF;
-        CIFs[1]=CIF_2;
-        CIFs[2]=CIF_3;
-        CIFs[3]=CIF_4;
-        CIFs[4]=CIF_5;
-        CIFs[5]=CIF_6;
+//        CIFs[0]=CIF;
+//        CIFs[1]=CIF_2;
+//        CIFs[2]=CIF_3;
+//        CIFs[3]=CIF_4;
+//        CIFs[4]=CIF_5;
+//        CIFs[5]=CIF_6;
 
         // Initialize the hex grid
         hexGrid = new HexGrid();
         for(int i = 0;i<6;i++) {
             atoms[i] = new Atom(new Texture("atom.png"), 100); // Adjust size and texture as needed
-            CIFs[i]= new Circle_of_influence(new Texture("pngwing.com.png"));
+//            CIFs[i]= new Circle_of_influence(new Texture("pngwing.com.png"));
 
         }
 
@@ -436,7 +445,10 @@ public class GameScreen extends ScreenAdapter {
             }
                     Vector2 randomHexPosition = hexGrid.calculateHexagonPosition(coordinates[Random_Coordinate[i]][0], coordinates[Random_Coordinate[i]][1]);
                     atoms[i].setPosition(randomHexPosition);
-                    CIFs[i].setPosition(atoms[i]);
+                    CIFs[i]=new Circle(atoms[i].getPosition().x,atoms[i].getPosition().y,100);
+
+
+
             }
         //dialog box
         int choice = JOptionPane.YES_OPTION;
@@ -487,31 +499,54 @@ public class GameScreen extends ScreenAdapter {
         batch.begin();
         hexGrid.render(batch);
 
+
         // Render the hex grid
         if (render_atoms) {
-
             renderGameBoard();
+
 
         }
 
         // Render the atom
-        batch.end();
 
+        batch.end();
         stage.act();
         stage.draw();
 
-        no_atom_encounter_absorbtion();
+        shapeRenderer = new ShapeRenderer();
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(0, 0, 0, 1); // Set color to red with 50% opacity
+        if (render_atoms) {
+            for (int i = 0; i < 6; i++) {
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                shapeRenderer.circle(CIFs[i].x, CIFs[i].y, 100); // Draw a circle with center at (100, 100) and radius 50
+                shapeRenderer.end();
+            }
 
-            box2DDebugRenderer.render(world, camera.combined);
         }
+        no_atom_encounter_absorbtion();
+//        shapeRenderer.setAutoShapeType(true);
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//        shapeRenderer.setColor(1, 0, 0, 1); // Red line
+//        shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
+
+
+
+        box2DDebugRenderer.render(world, camera.combined);
+    }
 
 
 
     private void renderGameBoard() {
+
         for(int i=0;i<6;i++){
+
+          //  CIFs[i].render(batch);
+
             atoms[i].render(batch);
-            CIFs[i].render(batch);
+
         }
+
     }
     public static int[] search2DArray(int[][] array, int target) {//searches the array for pairs
         for (int i = 0; i < array.length; i++) {
@@ -526,7 +561,7 @@ public class GameScreen extends ScreenAdapter {
 
     private Vector2 calculateEndPoint(Vector2 startPoint, float angle, float distance) {//calculates end point after 60 degree deflection
         float radAngle = (float) Math.toRadians(angle);
-        float x = startPoint.x + distance * (float) Math.cos(radAngle);
+        float x = startPoint.x + distance * (float) cos(radAngle);
         float y = startPoint.y + distance * (float) Math.sin(radAngle);
         return new Vector2(x, y);
     }
@@ -540,7 +575,7 @@ public class GameScreen extends ScreenAdapter {
         float dy = endPoint.y - startPoint.y;
         float length = (float) Math.sqrt(dx * dx + dy * dy);
         float deflectAngle = (float) Math.toRadians(180-angle + 120); // Deflect by 60 degrees
-        endPoint.set(startPoint.x + length * (float) Math.cos(deflectAngle), startPoint.y + length * (float) Math.sin(deflectAngle));
+        endPoint.set(startPoint.x + length * (float) cos(deflectAngle), startPoint.y + length * (float) Math.sin(deflectAngle));
 
         // Draw the deflected lin
     }
@@ -549,59 +584,221 @@ public class GameScreen extends ScreenAdapter {
         float dx = endPoint.x - startPoint.x;
         float dy = endPoint.y - startPoint.y;
         float length = (float) Math.sqrt(dx * dx + dy * dy);
-        float angle = (float) Math.atan2(dy, dx) + (float) Math.toRadians(60); // Deflect by 60 degrees
-        endPoint.set(deflectionPoint.x + length * (float) Math.cos(angle), deflectionPoint.y + length * (float) Math.sin(angle));
+        float angle = (float) Math.atan2(dy, dx) + (float) Math.toRadians(180-60); // Deflect by 60 degrees
+        endPoint.set(deflectionPoint.x + length * (float) cos(angle), deflectionPoint.y + length * (float) Math.sin(angle));
+        Vector2 newV = findintersection(startPoint, endPoint, CIFs);
 
-        shapeRenderer.rectLine(startPoint, endPoint, 5);
-        shapeRenderer.end();
+        if (newV != null) {
+//            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//            shapeRenderer.setColor(1, 0, 0, 1); // Red line
+//            shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
+//            shapeRenderer.rectLine(newV, startPoint, 5);
+//            shapeRenderer.end();
+            deflectLine(newV, startPoint, newV);
+        } else {
+//            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//            shapeRenderer.setColor(1, 0, 0, 1); // Red line
+//            shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
+//            shapeRenderer.rectLine(startPoint, endPoint, 5);
+//            shapeRenderer.end();
+//        }
+        }
     }
+//public static Vector2 deflectLine(Vector2 lineStart, Vector2 lineEnd, Circle circle) {
+//    Vector2 intersectionPoint = new Vector2();
+//    boolean intersects = Intersector.intersectSegmentCircle(lineStart, lineEnd, circle, intersectionPoint);
+//
+//    if (intersects) {
+//        // Check if the intersection point is on the right side of the circle
+//        if (intersectionPoint.x > circle.x) {
+//            return deflectLine(lineStart, lineEnd, 60); // Deflect by 60 degrees
+//        } else {
+//            return deflectLine(lineStart, lineEnd, -60); // Deflect by -60 degrees
+//        }
+//    } else {
+//        // If there's no intersection, return the original endpoint
+//        return lineEnd;
+//    }
+//}
+//
+//    public static Vector2 deflectLine(Vector2 lineStart, Vector2 lineEnd, float deflectionAngleDegrees) {
+//        // Calculate the angle between the line segment and the x-axis
+//        float angleRadians = (float) Math.atan2(lineEnd.y - lineStart.y, lineEnd.x - lineStart.x);
+//
+//        // Calculate the new angle after deflection
+//        float newAngleRadians = (float) (angleRadians + Math.toRadians(deflectionAngleDegrees));
+//
+//        // Calculate the length of the line segment
+//        float length = lineStart.dst(lineEnd);
+//
+//        // Calculate the new endpoint coordinates
+//        float newX = lineStart.x + length * (float) Math.cos(newAngleRadians);
+//        float newY = lineStart.y + length * (float) Math.sin(newAngleRadians);
+//
+//        return new Vector2(newX, newY);
+//    }
+
 
     private void no_atom_encounter_absorbtion() {
         deflectionPoint = hexGrid.calculateHexagonPosition(7.5, 16.25);
+//        Vector2[] linePt=new Vector2[2];
         if (render_atoms) {
-            for (int i = 0; i < Dialog_Input.size(); i++) {
-                int[] index = search2DArray(straightline_pairs, Dialog_Input.get(i));
-                shapeRenderer = new ShapeRenderer();
-                shapeRenderer.setAutoShapeType(true);
-                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-                shapeRenderer.setColor(1, 0, 0, 1); // Red line
-                shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
+//            for (int i = 0; i < Dialog_Input.size(); i++) {
+                int[] index = search2DArray(straightline_pairs, Dialog_Input.get(0));
+//                shapeRenderer = new ShapeRenderer();
                 if (index[1] == 1) {
-                    if (!deflecting) {
-                        hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0] - 1][0], edges[straightline_pairs[index[0]][0] - 1][1]).x += 2; // Move the endpoint of the line horizontally
-                        if (hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0] - 1][0], edges[straightline_pairs[index[0]][0] - 1][1]).x >= deflectionPoint.x) {
-                            deflecting = true;
-//                            deflectLine(hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0]-1][0], edges[straightline_pairs[index[0]][0]-1][1]),hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1]-1][0], edges[straightline_pairs[index[0]][1]-1][1]));
-                        }
-                    } else {
+//                    if (!deflecting) {
+//                        hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0] - 1][0], edges[straightline_pairs[index[0]][0] - 1][1]).x += 2; // Move the endpoint of the line horizontally
+//                        if (hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0] - 1][0], edges[straightline_pairs[index[0]][0] - 1][1]).x >= deflectionPoint.x) {
+//                            deflecting = true;
+//                          linePt[0]=hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0]-1][0], edges[straightline_pairs[index[0]][0]-1][1]);
+//                          linePt[1]=hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1]-1][0], edges[straightline_pairs[index[0]][1]-1][1]);
+////                            return (hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0]-1][0], edges[straightline_pairs[index[0]][0]-1][1]),hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1]-1][0], edges[straightline_pairs[index[0]][1]-1][1]),5);
+//                            return linePt;
+////                            shapeRenderer.end();
+//                            }
+//                    } else {
                         Vector2 startPoint = hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1] - 1][0], edges[straightline_pairs[index[0]][1] - 1][1]);
                         Vector2 endPoint = hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0] - 1][0], edges[straightline_pairs[index[0]][0] - 1][1]);
+//                       return (startPoint,endPoint,5);
+                        linePt[0]=startPoint;
+                        linePt[1]=endPoint;
+
+//                        shapeRenderer.end();
                         // Deflect the line
-                        angle_60();
-                    }
+//                        angle_60();
+//                    }
+
 
 
                 } else {
 
 //                shapeRenderer.rectLine(hexGrid.calculateHexagonPosition(edges[0][0], edges[0][1]), hexGrid.calculateHexagonPosition(edges[27][0], edges[27][1]), 5);
 //                shapeRenderer.end();
-                    if (!deflecting) {
-                        hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1] - 1][0], edges[straightline_pairs[index[0]][1] - 1][1]).x += 2; // Move the endpoint of the line horizontally
-                        if (hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1] - 1][0], edges[straightline_pairs[index[0]][1] - 1][1]).x >= deflectionPoint.x) {
-                            deflecting = true;
-//                            deflectLine(hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0]-1][0], edges[straightline_pairs[index[0]][0]-1][1]),hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1]-1][0], edges[straightline_pairs[index[0]][1]-1][1]));
-                        }
-                    } else {
+//                    if (!deflecting) {
+//                        hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1] - 1][0], edges[straightline_pairs[index[0]][1] - 1][1]).x += 2; // Move the endpoint of the line horizontally
+//                        if (hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1] - 1][0], edges[straightline_pairs[index[0]][1] - 1][1]).x >= deflectionPoint.x) {
+//                            deflecting = true;
+//                            linePt[0]=hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0]-1][0], edges[straightline_pairs[index[0]][0]-1][1]);
+//                            linePt[1]=hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1]-1][0], edges[straightline_pairs[index[0]][1]-1][1]);
+//                            return linePt;
+////                            return(hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0]-1][0], edges[straightline_pairs[index[0]][0]-1][1]),hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1]-1][0], edges[straightline_pairs[index[0]][1]-1][1]),5);
+////                            shapeRenderer.end();
+//                        }
+//
+//                    } else {
                         Vector2 startPoint = hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0] - 1][0], edges[straightline_pairs[index[0]][0] - 1][1]);
                         Vector2 endPoint = hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1] - 1][0], edges[straightline_pairs[index[0]][1] - 1][1]);
+                        linePt[0]=startPoint;
+                        linePt[1]=endPoint;
+//                        return linePt;
+//                        return(startPoint,endPoint);
+//                        shapeRenderer.end();
                         // Deflect the line
-                        angle_60();
-                    }
+//                        angle_60();
+//                    }
 
                 }
+                Intersector.MinimumTranslationVector intersection=new Intersector.MinimumTranslationVector();
 
+
+            for(int i=0;i<6;i++) {
+                boolean[] intersects = new boolean[6];
+                Vector2 newV=findintersection(linePt[0], linePt[1],CIFs);
+                intersects[i]=Intersector.intersectSegmentCircle(linePt[0], linePt[1],CIFs[i],intersection);
+                Vector2 mtvVector = new Vector2((float) (CIFs[i].x+(cos(intersection.normal.x) * 100)), (float) (CIFs[i].y+(sin(intersection.normal.y) * 100)));
+                if (intersects[i]) {
+//                    shapeRenderer.setAutoShapeType(true);
+//                    shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//                    shapeRenderer.setColor(1, 0, 0, 1); // Red line
+//                    shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
+//                    shapeRenderer.rectLine(linePt[0], newV,5);
+//                    shapeRenderer.end();
+                    deflectLine(newV, linePt[0],newV);
+//                    shapeRenderer.end();
+                    System.out.println(intersection.normal.x+","+intersection.normal.y);
+                    break;
+                } else {
+                    System.out.println("Line does not intersect circle.");
+                }
+            }
+            }
+//        }
+
+
+
+    }
+    public static Vector2 findintersection(Vector2 lineStart, Vector2 lineEnd, Circle[] circles) {
+        Vector2 intersectionPoint = null;
+        float minDistance = Float.MAX_VALUE;
+
+        for (Circle circle : circles) {
+            Vector2 point = findIntersection(lineStart, lineEnd, circle);
+            if (point != null) {
+                float distance = lineStart.dst(point);
+                if (distance < minDistance) {
+                    intersectionPoint = point;
+                    minDistance = distance;
+                }
             }
         }
+
+        return intersectionPoint;
+    }
+
+    public static Vector2 findIntersection(Vector2 lineStart, Vector2 lineEnd, Circle circle) {
+        Vector2 lineVector = new Vector2(lineEnd).sub(lineStart);
+        Vector2 circleToLineStart = new Vector2(lineStart).sub(circle.x, circle.y);
+
+        // Quadratic equation coefficients
+        float a = lineVector.dot(lineVector);
+        float b = 2 * circleToLineStart.dot(lineVector);
+        float c = circleToLineStart.dot(circleToLineStart) - circle.radius * circle.radius;
+
+        // Discriminant
+        float discriminant = b * b - 4 * a * c;
+
+        // If discriminant < 0, no intersection
+        if (discriminant < 0) {
+            return null;
+        }
+
+        // Calculate roots
+        float sqrtDiscriminant = (float) Math.sqrt(discriminant);
+        float t1 = (-b + sqrtDiscriminant) / (2 * a);
+        float t2 = (-b - sqrtDiscriminant) / (2 * a);
+
+        // Evaluate intersection points
+        Vector2 intersectionPoint1 = new Vector2(lineStart.x + t1 * lineVector.x, lineStart.y + t1 * lineVector.y);
+        Vector2 intersectionPoint2 = new Vector2(lineStart.x + t2 * lineVector.x, lineStart.y + t2 * lineVector.y);
+
+        // Check if intersection points are on the line segment
+        if (t1 >= 0 && t1 <= 1 && t2 >= 0 && t2 <= 1) {
+            // Both points are within the line segment
+            return (intersectionPoint1.dst(lineStart) < intersectionPoint2.dst(lineStart)) ? intersectionPoint1 : intersectionPoint2;
+        } else if (t1 >= 0 && t1 <= 1) {
+            // Only intersectionPoint1 is within the line segment
+            return intersectionPoint1;
+        } else if (t2 >= 0 && t2 <= 1) {
+            // Only intersectionPoint2 is within the line segment
+            return intersectionPoint2;
+        }
+
+        // No intersection point within the line segment
+        return null;
+    }
+    // Function to calculate the deflected angle
+    public static double deflectAngle(double angleOfIncidence) {
+        // Assuming the angle of reflection is 180 degrees + angle of incidence
+        double angleOfReflection = 180 + angleOfIncidence;
+
+        // Ensure the angle of reflection is within [0, 360) degrees
+        angleOfReflection %= 360;
+        if (angleOfReflection < 0) {
+            angleOfReflection += 360;
+        }
+
+        return angleOfReflection;
     }
 
 
