@@ -589,67 +589,6 @@ public class GameScreen extends ScreenAdapter {
             rows.add(new ArrayList<>());
 
         }
-//        rows.get(0).add(0);
-//        rows.get(0).add(1);
-//        rows.get(0).add(2);
-//        rows.get(0).add(3);
-//        rows.get(0).add(4);
-//        rows.get(1).add(5);
-//        rows.get(1).add(6);
-//        rows.get(1).add(7);
-//        rows.get(1).add(8);
-//        rows.get(1).add(9);
-//        rows.get(1).add(10);
-//        rows.get(2).add(11);
-//        rows.get(2).add(12);
-//        rows.get(2).add(13);
-//        rows.get(2).add(14);
-//        rows.get(2).add(15);
-//        rows.get(2).add(16);
-//        rows.get(2).add(17);
-//        rows.get(3).add(18);
-//        rows.get(3).add(19);
-//        rows.get(3).add(20);
-//        rows.get(3).add(21);
-//        rows.get(3).add(22);
-//        rows.get(3).add(23);
-//        rows.get(3).add(24);
-//        rows.get(3).add(25);
-//        rows.get(4).add(26);
-//        rows.get(4).add(27);
-//        rows.get(4).add(28);
-//        rows.get(4).add(29);
-//        rows.get(4).add(30);
-//        rows.get(4).add(31);
-//        rows.get(4).add(32);
-//        rows.get(4).add(33);
-//        rows.get(4).add(34);
-//        rows.get(5).add(35);
-//        rows.get(5).add(36);
-//        rows.get(5).add(37);
-//        rows.get(5).add(38);
-//        rows.get(5).add(39);
-//        rows.get(5).add(40);
-//        rows.get(5).add(41);
-//        rows.get(5).add(42);
-//        rows.get(6).add(43);
-//        rows.get(6).add(44);
-//        rows.get(6).add(45);
-//        rows.get(6).add(46);
-//        rows.get(6).add(47);
-//        rows.get(6).add(48);
-//        rows.get(6).add(49);
-//        rows.get(7).add(50);
-//        rows.get(7).add(51);
-//        rows.get(7).add(52);
-//        rows.get(7).add(53);
-//        rows.get(7).add(54);
-//        rows.get(7).add(55);
-//        rows.get(8).add(56);
-//        rows.get(8).add(57);
-//        rows.get(8).add(58);
-//        rows.get(8).add(59);
-//        rows.get(8).add(60);
 
         rows.get(0).add(0);
         rows.get(0).add(1);
@@ -743,35 +682,7 @@ public class GameScreen extends ScreenAdapter {
 
 
             }
-        //dialog box
-//        int choice = JOptionPane.YES_OPTION;
-//        JTextField textField = new JTextField();
-//        Object[] options = {"Input", "Stop"};
-//        while(choice != JOptionPane.NO_OPTION) {
-//        // Display the dialog box with input text field and custom buttons
-//        choice = JOptionPane.showOptionDialog(
-//                null,
-//                textField,
-//                "Input Dialog",
-//                JOptionPane.YES_NO_OPTION,
-//                JOptionPane.QUESTION_MESSAGE,
-//                null,
-//                options,
-//                options[0]);
-//        // Process user's choice
-//
-//            if (choice == JOptionPane.YES_OPTION) {
-//                String inputText = textField.getText();
-//                Dialog_Input.add(Integer.parseInt(inputText));
-//                Gdx.app.log("Dialog Box", "User clicked Input. Input: " + inputText);
-//            } else if (choice == JOptionPane.NO_OPTION) {
-//                Gdx.app.log("Dialog Box", "User clicked Stop.");
-//            } else {
-//                Gdx.app.log("Dialog Box", "User closed the dialog without clicking Input or Stop.");
-//            }
-//
-//
-//        }
+
 
     }
 
@@ -789,18 +700,6 @@ public class GameScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-//        shapeRenderer = new ShapeRenderer();
-//        shapeRenderer.setProjectionMatrix(camera.combined);
-////        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-//
-////        shapeRenderer.setColor(Color.RED);
-//        for(int i=0;i<9;i++){
-//            for(int j=0;j<rows.get(i).size();j++){
-//                Vector2 midpoint=hexGrid.calculateHexagonPosition(coordinates[i][j][0],coordinates[i][j][1]);
-//                drawHexagon(midpoint.x,midpoint.y, 55);
-//            }
-//        }
-//        shapeRenderer.end();
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
@@ -816,21 +715,16 @@ public class GameScreen extends ScreenAdapter {
 //
         if(ShowScore) {
             font.setColor(Color.RED);
-//        batch.begin();
             font.getData().setScale(3);
             font.draw(batch, "SCORE:\n" + score, 0, 900);
         }
-//        batch.end();
-//
-//        // Render the hex grid
+
         if (render_atoms) {
             renderGameBoard();
 
 
         }
-//
-//        // Render the atom
-//
+
         batch.end();
         stage.act();
         stage.draw();
@@ -861,7 +755,7 @@ public class GameScreen extends ScreenAdapter {
 
 
 
-    private void renderGameBoard() {
+    private void renderGameBoard() {//renders the game board
 
         for(int i=0;i<6;i++){
 
@@ -872,6 +766,12 @@ public class GameScreen extends ScreenAdapter {
         }
 
     }
+
+    /**
+     * @param array
+     * @param target
+     * @return an int array with index of the array where the element in the 2d array matches with the target
+     */
     public static int[] search2DArray(int[][] array, int target) {//searches the array for pairs
         for (int i = 0; i < array.length; i++) {
             if (array[i][1] == target) {
@@ -883,290 +783,12 @@ public class GameScreen extends ScreenAdapter {
         return null;
     }
 
-    private Vector2 calculateEndPoint(Vector2 startPoint, float angle, float distance) {//calculates end point after 60 degree deflection
-        float radAngle = (float) Math.toRadians(angle);
-        float x = startPoint.x + distance * (float) cos(radAngle);
-        float y = startPoint.y + distance * (float) Math.sin(radAngle);
-        return new Vector2(x, y);
-    }
-    private void angle_60(){
-        Vector2 startPoint =  hexGrid.calculateHexagonPosition(23.5,22.25); // Example starting point
-        float angle = -60; // Example angle (in degrees)
-        Vector2 endPoint = calculateEndPoint(startPoint, angle, 200); // Calculate the endpoint
-
-        // Deflect the line
-        float dx = endPoint.x - startPoint.x;
-        float dy = endPoint.y - startPoint.y;
-        float length = (float) Math.sqrt(dx * dx + dy * dy);
-        float deflectAngle = (float) Math.toRadians(180-angle + 120); // Deflect by 60 degrees
-        endPoint.set(startPoint.x + length * (float) cos(deflectAngle), startPoint.y + length * (float) Math.sin(deflectAngle));
-
-        // Draw the deflected lin
-    }
-    private void deflectLine(Vector2 startPoint, Vector2 endPoint, Vector2 deflectionPoint, float angle) {
-        // Calculate deflected endpoint
-        float dx = endPoint.x - startPoint.x;
-        float dy = endPoint.y - startPoint.y;
-        float length = (float) Math.sqrt(dx * dx + dy * dy);
-        endPoint.set(deflectionPoint.x + length * (float) Math.cos(angle), deflectionPoint.y + length * (float) Math.sin(angle));
-
-        // Find intersection point and circle of influence
-        Vector2 newV = findintersection(startPoint, endPoint, CIFs);
-        Circle newC = findCIF(startPoint, endPoint, CIFs);
-
-        // Check if newV is null
-        if (newV == null) {
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.setColor(1, 0, 0, 1); // Red line
-            shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.rectLine(startPoint, endPoint, 5);
-            shapeRenderer.end();
-            return; // Exit the method
-        }
-
-        // Determine if newV is on the right side of the circle
-        boolean onRightSide = (newV.x > newC.x);
-
-        // Deflect the line accordingly
-        if (onRightSide) {
-            // Deflect by 60 degrees
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.setColor(1, 0, 0, 1); // Red line
-            shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.rectLine(newV, startPoint, 5);
-            shapeRenderer.end();
-            float angle1 = (float) Math.atan2(dy, dx) + (float) Math.toRadians(240);
-            deflectLine(newV, startPoint, newV, angle1);
-        } else {
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-            shapeRenderer.setColor(1, 0, 0, 1); // Red line
-            shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.rectLine(newV, startPoint, 5);
-            shapeRenderer.end();
-            float angle2 = (float) Math.atan2(dy, dx) + (float) Math.toRadians(120);
-            deflectLine(newV, startPoint, newV, angle2);
-        }
-    }
-//public static Vector2 deflectLine(Vector2 lineStart, Vector2 lineEnd, Circle circle) {
-//    Vector2 intersectionPoint = new Vector2();
-//    boolean intersects = Intersector.intersectSegmentCircle(lineStart, lineEnd, circle, intersectionPoint);
-//
-//    if (intersects) {
-//        // Check if the intersection point is on the right side of the circle
-//        if (intersectionPoint.x > circle.x) {
-//            return deflectLine(lineStart, lineEnd, 60); // Deflect by 60 degrees
-//        } else {
-//            return deflectLine(lineStart, lineEnd, -60); // Deflect by -60 degrees
-//        }
-//    } else {
-//        // If there's no intersection, return the original endpoint
-//        return lineEnd;
-//    }
-//}
-//
-//    public static Vector2 deflectLine(Vector2 lineStart, Vector2 lineEnd, float deflectionAngleDegrees) {
-//        // Calculate the angle between the line segment and the x-axis
-//        float angleRadians = (float) Math.atan2(lineEnd.y - lineStart.y, lineEnd.x - lineStart.x);
-//
-//        // Calculate the new angle after deflection
-//        float newAngleRadians = (float) (angleRadians + Math.toRadians(deflectionAngleDegrees));
-//
-//        // Calculate the length of the line segment
-//        float length = lineStart.dst(lineEnd);
-//
-//        // Calculate the new endpoint coordinates
-//        float newX = lineStart.x + length * (float) Math.cos(newAngleRadians);
-//        float newY = lineStart.y + length * (float) Math.sin(newAngleRadians);
-//
-//        return new Vector2(newX, newY);
-//    }
-
-
-    private void no_atom_encounter_absorbtion() {
-        deflectionPoint = hexGrid.calculateHexagonPosition(7.5, 16.25);
-//        Vector2[] linePt=new Vector2[2];
-        if (render_atoms) {
-//            for (int i = 0; i < Dialog_Input.size(); i++) {
-                int[] index = search2DArray(straightline_pairs, Dialog_Input.get(0));
-//                shapeRenderer = new ShapeRenderer();
-                if (index[1] == 1) {
-//                    if (!deflecting) {
-//                        hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0] - 1][0], edges[straightline_pairs[index[0]][0] - 1][1]).x += 2; // Move the endpoint of the line horizontally
-//                        if (hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0] - 1][0], edges[straightline_pairs[index[0]][0] - 1][1]).x >= deflectionPoint.x) {
-//                            deflecting = true;
-//                          linePt[0]=hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0]-1][0], edges[straightline_pairs[index[0]][0]-1][1]);
-//                          linePt[1]=hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1]-1][0], edges[straightline_pairs[index[0]][1]-1][1]);
-////                            return (hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0]-1][0], edges[straightline_pairs[index[0]][0]-1][1]),hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1]-1][0], edges[straightline_pairs[index[0]][1]-1][1]),5);
-//                            return linePt;
-////                            shapeRenderer.end();
-//                            }
-//                    } else {
-                        Vector2 startPoint = hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1] - 1][0], edges[straightline_pairs[index[0]][1] - 1][1]);
-                        Vector2 endPoint = hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0] - 1][0], edges[straightline_pairs[index[0]][0] - 1][1]);
-//                       return (startPoint,endPoint,5);
-                        linePt[0]=startPoint;
-                        linePt[1]=endPoint;
-
-//                        shapeRenderer.end();
-                        // Deflect the line
-//                        angle_60();
-//                    }
-
-
-
-                } else {
-
-//                shapeRenderer.rectLine(hexGrid.calculateHexagonPosition(edges[0][0], edges[0][1]), hexGrid.calculateHexagonPosition(edges[27][0], edges[27][1]), 5);
-//                shapeRenderer.end();
-//                    if (!deflecting) {
-//                        hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1] - 1][0], edges[straightline_pairs[index[0]][1] - 1][1]).x += 2; // Move the endpoint of the line horizontally
-//                        if (hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1] - 1][0], edges[straightline_pairs[index[0]][1] - 1][1]).x >= deflectionPoint.x) {
-//                            deflecting = true;
-//                            linePt[0]=hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0]-1][0], edges[straightline_pairs[index[0]][0]-1][1]);
-//                            linePt[1]=hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1]-1][0], edges[straightline_pairs[index[0]][1]-1][1]);
-//                            return linePt;
-////                            return(hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0]-1][0], edges[straightline_pairs[index[0]][0]-1][1]),hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1]-1][0], edges[straightline_pairs[index[0]][1]-1][1]),5);
-////                            shapeRenderer.end();
-//                        }
-//
-//                    } else {
-                        Vector2 startPoint = hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][0] - 1][0], edges[straightline_pairs[index[0]][0] - 1][1]);
-                        Vector2 endPoint = hexGrid.calculateHexagonPosition(edges[straightline_pairs[index[0]][1] - 1][0], edges[straightline_pairs[index[0]][1] - 1][1]);
-                        linePt[0]=startPoint;
-                        linePt[1]=endPoint;
-//                        return linePt;
-//                        return(startPoint,endPoint);
-//                        shapeRenderer.end();
-                        // Deflect the line
-//                        angle_60();
-//                    }
-
-                }
-                Intersector.MinimumTranslationVector intersection=new Intersector.MinimumTranslationVector();
-
-
-            for(int i=0;i<6;i++) {
-                boolean[] intersects = new boolean[6];
-                Vector2 newV=findintersection(linePt[0], linePt[1],CIFs);
-                intersects[i]=Intersector.intersectSegmentCircle(linePt[0], linePt[1],CIFs[i],intersection);
-                Vector2 mtvVector = new Vector2((float) (CIFs[i].x+(cos(intersection.normal.x) * 100)), (float) (CIFs[i].y+(sin(intersection.normal.y) * 100)));
-                if (intersects[i]) {
-                    shapeRenderer.setAutoShapeType(true);
-                    shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-                    shapeRenderer.setColor(1, 0, 0, 1); // Red line
-                    shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
-                    shapeRenderer.rectLine(linePt[0], newV,5);
-                    shapeRenderer.end();
-                    float dx = linePt[0].x - newV.x;
-                    float dy = linePt[0].y - newV.y;
-                    float angle = (float) Math.atan2(dy, dx) + (float) Math.toRadians(240);
-                    deflectLine(newV, linePt[0],newV,angle);
-//                    shapeRenderer.end();
-                    System.out.println(intersection.normal.x+","+intersection.normal.y);
-                    break;
-                } else {
-                    System.out.println("Line does not intersect circle.");
-                }
-            }
-            }
-//        }
-
-
-
-    }
-    public static Vector2 findintersection(Vector2 lineStart, Vector2 lineEnd, Circle[] circles) {//implements intersection coordinate of ine and circle of influence
-        Vector2 intersectionPoint = null;
-        float minDistance = Float.MAX_VALUE;
-
-        for (Circle circle : circles) {
-            Vector2 point = findIntersection(lineStart, lineEnd, circle);
-            if (point != null) {
-                float distance = lineStart.dst(point);
-                if (distance < minDistance) {
-                    intersectionPoint = point;
-                    minDistance = distance;
-                }
-            }
-        }
-
-        return intersectionPoint;
-    }
-    public static Circle findCIF(Vector2 lineStart, Vector2 lineEnd, Circle[] circles) {//implements intersection coordinate of ine and circle of influence
-        Circle C = null;
-        float minDistance = Float.MAX_VALUE;
-
-        for (Circle circle : circles) {
-            Vector2 point = findIntersection(lineStart, lineEnd, circle);
-            if (point != null) {
-                float distance = lineStart.dst(point);
-                if (distance < minDistance) {
-                    C = circle;
-                    minDistance = distance;
-                }
-            }
-        }
-
-        return C;
-    }
-
-    public static Vector2 findIntersection(Vector2 lineStart, Vector2 lineEnd, Circle circle) {
-        Vector2 lineVector = new Vector2(lineEnd).sub(lineStart);
-        Vector2 circleToLineStart = new Vector2(lineStart).sub(circle.x, circle.y);
-
-        // Quadratic equation coefficients
-        float a = lineVector.dot(lineVector);
-        float b = 2 * circleToLineStart.dot(lineVector);
-        float c = circleToLineStart.dot(circleToLineStart) - circle.radius * circle.radius;
-
-        // Discriminant
-        float discriminant = b * b - 4 * a * c;
-
-        // If discriminant < 0, no intersection
-        if (discriminant < 0) {
-            return null;
-        }
-
-        // Calculate roots
-        float sqrtDiscriminant = (float) Math.sqrt(discriminant);
-        float t1 = (-b + sqrtDiscriminant) / (2 * a);
-        float t2 = (-b - sqrtDiscriminant) / (2 * a);
-
-        // Evaluate intersection points
-        Vector2 intersectionPoint1 = new Vector2(lineStart.x + t1 * lineVector.x, lineStart.y + t1 * lineVector.y);
-        Vector2 intersectionPoint2 = new Vector2(lineStart.x + t2 * lineVector.x, lineStart.y + t2 * lineVector.y);
-
-        // Determine which side of the circle the intersection occurred on
-
-        // Check if intersection points are on the line segment
-//        if (t1 >= 0 && t1 <= 1 && t2 >= 0 && t2 <= 1) {
-//            // Both points are within the line segment
-//            return new Vector2(intersectionPoint1.x, intersectionPoint1.y);
-          if (t1 >= 0 && t1 <= 1) {
-            // Only intersectionPoint1 is within the line segment
-            return new Vector2(intersectionPoint1.x, intersectionPoint1.y);
-        } else if (t2 >= 0 && t2 <= 1) {
-            // Only intersectionPoint2 is within the line segment
-            return new Vector2(intersectionPoint2.x, intersectionPoint2.y);
-        }
-
-        // No intersection point within the line segment
-        return null;
-    }
 
     // Function to calculate the deflected angle
-    public static double deflectAngle(double angleOfIncidence) {
-        // Assuming the angle of reflection is 180 degrees + angle of incidence
-        double angleOfReflection = 180 + angleOfIncidence;
 
-        // Ensure the angle of reflection is within [0, 360) degrees
-        angleOfReflection %= 360;
-        if (angleOfReflection < 0) {
-            angleOfReflection += 360;
-        }
-
-        return angleOfReflection;
-    }
-
+    /**
+     * This Function is the main function for most of the ray deflection logic is in the code. rays are also rendered in this function.
+     */
     public void newDeflect() {
         if (render_atoms) {
             for (int i = 0; i < Dialog_Input.size(); i++) {
@@ -1194,18 +816,7 @@ public class GameScreen extends ScreenAdapter {
                     shapeRenderer.end();
                     if(!Find_atom_start(Near_point)) {
                         startPoint=Near_point;
-//                   for(int x=0;x<3;x++) {
-//                        while (Boundry(Row_cols)) {
                         do{
-//                        if(Row_cols.x>4){
-//                            Row_cols.x=Row_cols.x + D.getDx();
-//                            Row_cols.y=Row_cols.y + D.getDy();
-//                        }
-//                        else{
-//                            Row_cols.x=Row_cols.x + D.getDx();
-//                            Row_cols.y=Row_cols.y + D.getDy();
-//                        }
-
 
                             if (D == Innercore.Direction.EAST && Row_cols.x == 0) {
 
@@ -1589,9 +1200,6 @@ break;
 
                             }
 
-
-//                        System.out.println(Row_cols);
-                            System.out.println(Hex_next + "," + Row_cols);
                             Near_point = hexGrid.calculateHexagonPosition(coordinates[(int) (Row_cols.x)][(int) (Row_cols.y)][0], coordinates[(int) (Row_cols.x)][(int) (Row_cols.y)][1]);
                             shapeRenderer.setAutoShapeType(true);
                             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -1600,10 +1208,10 @@ break;
                             shapeRenderer.rectLine(startPoint, Near_point, 5);
                             shapeRenderer.end();
                             startPoint = Near_point;
-//                        }while(Hex_next.y>=0 && Hex_next.y<=rows.get((int) Hex_next.x).size()-1 && Hex_next.x>4 && Hex_next.x<8);;
+
                         }while(Boundry(Hex_next, Dialog_Input.get(i)));
                         if(absorbed==false){
-                            System.out.println(D);
+
                            Vector2 Direction2=getDir(D);
                             Vector2 Endpoint=null;
                             if(D== Innercore.Direction.EAST||D== Innercore.Direction.WEST){
@@ -1620,15 +1228,7 @@ break;
                             shapeRenderer.rectLine(Near_point,Endpoint, 5);
                             shapeRenderer.end();
                         }
-//                    shapeRenderer.setAutoShapeType(true);
-//                    shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//                    shapeRenderer.setColor(1, 0, 0, 1); // Red line
-//                    shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
-//                    shapeRenderer.rectLine(startPoint, Near_point,5);
-//                    shapeRenderer.end();
-//                    startPoint=Near_point;
-//                    Vector2 Direction2 = findDirection(Near_point, endPoint);
-//                    Vector2 Near_point2=findNearestPointInDirection(Direction2,startPoint,coordinates);
+
                     }
                 }
                 else {
@@ -2043,11 +1643,11 @@ break;
                             shapeRenderer.rectLine(startPoint, Near_point, 5);
                             shapeRenderer.end();
                             startPoint = Near_point;
-                            System.out.println(rows.get((int) Hex_next.x).size());
+                            //.out.println(rows.get((int) Hex_next.x).size());
 //                        }while(Hex_next.y>=0 && Hex_next.y<=rows.get((int) Hex_next.x).size()-1 && Hex_next.x>0 && Hex_next.x<8);
                         }while(Boundry(Hex_next, Dialog_Input.get(i)));
                         if(absorbed==false){
-                            System.out.println(D);
+                            //.out.println(D);
                             Vector2 Direction2=getDir(D);
                             Vector2 Endpoint=null;
                             if(D== Innercore.Direction.EAST||D== Innercore.Direction.WEST){
@@ -2066,14 +1666,6 @@ break;
                             shapeRenderer.end();
                         }
 
-//                    shapeRenderer.setAutoShapeType(true);
-//                    shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//                    shapeRenderer.setColor(1, 0, 0, 1); // Red line
-//                    shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
-//                    shapeRenderer.rectLine(startPoint, Near_point,5);
-//                    shapeRenderer.end();
-//                    startPoint=Near_point;
-
 
                     }
                 }
@@ -2081,6 +1673,9 @@ break;
         }
     }
 
+    /**
+     * This fuction is also very important as this function makes the logic behind the deflection but lines are not rendered. This function also helps the arrows to be printed.
+     */
     public void newDeflectWithoutRender() {
 
             for (int i = 0; i < Dialog_Input.size(); i++) {
@@ -2101,26 +1696,9 @@ break;
                     float angle=Direction.angle();
                     Vector2 Near_point = findNearestPointInDirection(Direction,startPoint,coordinates);
                     drawArrow(batch,startPoint,angle);
-//                    shapeRenderer.setAutoShapeType(true);
-//                    shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//                    shapeRenderer.setColor(1, 0, 0, 1); // Red line
-//                    shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
-//                    shapeRenderer.rectLine(startPoint, Near_point,5);
-//                    shapeRenderer.end();
                     if(!Find_atom_start(Near_point)) {
                         startPoint=Near_point;
-//                   for(int x=0;x<3;x++) {
-//                        while (Boundry(Row_cols)) {
                         do{
-//                        if(Row_cols.x>4){
-//                            Row_cols.x=Row_cols.x + D.getDx();
-//                            Row_cols.y=Row_cols.y + D.getDy();
-//                        }
-//                        else{
-//                            Row_cols.x=Row_cols.x + D.getDx();
-//                            Row_cols.y=Row_cols.y + D.getDy();
-//                        }
-
 
                             if (D == Innercore.Direction.EAST && Row_cols.x == 0) {
 
@@ -2504,43 +2082,19 @@ break;
 
                             }
 
-
-//                        System.out.println(Row_cols);
-                            System.out.println(Hex_next + "," + Row_cols);
                             Near_point = hexGrid.calculateHexagonPosition(coordinates[(int) (Row_cols.x)][(int) (Row_cols.y)][0], coordinates[(int) (Row_cols.x)][(int) (Row_cols.y)][1]);
-//                            shapeRenderer.setAutoShapeType(true);
-//                            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//                            shapeRenderer.setColor(1, 0, 0, 1); // Red line
-//                            shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
-//                            shapeRenderer.rectLine(startPoint, Near_point, 5);
-//                            shapeRenderer.end();
+
                             startPoint = Near_point;
-//                        }while(Hex_next.y>=0 && Hex_next.y<=rows.get((int) Hex_next.x).size()-1 && Hex_next.x>4 && Hex_next.x<8);;
+
                         }while(Boundry(Hex_next, Dialog_Input.get(i)));
                         if(absorbed==false){
-                            System.out.println(D);
+                            //.out.println(D);
                             Vector2 Direction2=getDir(D);
                             float arrowRotation = Direction2.angle();
                             Vector2 Endpoint=findSecondNearestPoint(Direction2,Near_point,edges);
                             drawArrow(batch,Near_point,arrowRotation);
-//                            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-//                            shapeRenderer.setColor(1, 0, 0, 1); // Set color to red
-////                            drawArrow(shapeRenderer, Endpoint.x + arrow.getWidth() / 2, Endpoint.y + arrow.getHeight() / 2, 100, 50, arrowRotation); // Example arrow, adjust dimensions as needed
-////                            drawArrow(batch,arrow,Endpoint.x, Endpoint.y, arrow.getWidth(), arrow.getHeight(), arrowRotation);
-//                            drawArrow(shapeRenderer, Endpoint, arrowRotation);
-//                            shapeRenderer.end();
-////                            shapeRenderer.end();
 
                         }
-//                    shapeRenderer.setAutoShapeType(true);
-//                    shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//                    shapeRenderer.setColor(1, 0, 0, 1); // Red line
-//                    shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
-//                    shapeRenderer.rectLine(startPoint, Near_point,5);
-//                    shapeRenderer.end();
-//                    startPoint=Near_point;
-//                    Vector2 Direction2 = findDirection(Near_point, endPoint);
-//                    Vector2 Near_point2=findNearestPointInDirection(Direction2,startPoint,coordinates);
                     }
                 }
                 else {
@@ -2553,12 +2107,6 @@ break;
                     Vector2 Near_point = findNearestPointInDirection(Direction, startPoint, coordinates);
                     drawArrow(batch,startPoint,angle);
                     boolean absorbed=false;
-//                    shapeRenderer.setAutoShapeType(true);
-//                    shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//                    shapeRenderer.setColor(1, 0, 0, 1); // Red line
-//                    shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
-//                    shapeRenderer.rectLine(startPoint, Near_point, 5);
-//                    shapeRenderer.end();
                     if (!Find_atom_start(Near_point)) {
                         startPoint = Near_point;
 //                        while (Boundry(Row_cols)) {
@@ -2945,67 +2493,38 @@ break;
                                 }
 
                             }
-//                        System.out.println(Find_atom(Hex_next));
-//                        System.out.println(Row_cols);
-
                             Near_point = hexGrid.calculateHexagonPosition(coordinates[(int) (Row_cols.x)][(int) (Row_cols.y)][0], coordinates[(int) (Row_cols.x)][(int) (Row_cols.y)][1]);
 
-//                            shapeRenderer.setAutoShapeType(true);
-//                            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//                            shapeRenderer.setColor(1, 0, 0, 1); // Red line
-//                            shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
-//                            shapeRenderer.rectLine(startPoint, Near_point, 5);
-//                            shapeRenderer.end();
                             startPoint = Near_point;
-                            System.out.println(rows.get((int) Hex_next.x).size());
-//                        }while(Hex_next.y>=0 && Hex_next.y<=rows.get((int) Hex_next.x).size()-1 && Hex_next.x>0 && Hex_next.x<8);
                         }while(Boundry(Hex_next, Dialog_Input.get(i)));
                         if(absorbed==false){
-                            System.out.println(D);
                             Vector2 Direction2=getDir(D);
                             float arrowRotation = Direction2.angle();
                             Vector2 Endpoint=findSecondNearestPoint(Direction2,Near_point,edges);
                             drawArrow(batch,Near_point,arrowRotation);
-//                            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-//                            shapeRenderer.setColor(1, 0, 0, 1); // Set color to red
-//                            drawArrow(shapeRenderer, Endpoint, arrowRotation);
-//                            shapeRenderer.end();
-//                            drawArrow(batch, Endpoint.x + arrow.getWidth() / 2, Endpoint.y + arrow.getHeight() / 2, 100, 50, arrowRotation); // Example arrow, adjust dimensions as needed
-//                            drawArrow(batch,arrow,Endpoint.x, Endpoint.y , arrow.getWidth(), arrow.getHeight(), arrowRotation);
-//                            shapeRenderer.end();
-//                            shapeRenderer.setAutoShapeType(true);
-//                            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//                            shapeRenderer.setColor(1, 0, 0, 1); // Red line
-//                            shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
-//                            shapeRenderer.rectLine(Near_point,Endpoint, 5);
-//                            shapeRenderer.end();
-                        }
 
-//                    shapeRenderer.setAutoShapeType(true);
-//                    shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//                    shapeRenderer.setColor(1, 0, 0, 1); // Red line
-//                    shapeRenderer.set(ShapeRenderer.ShapeType.Filled);
-//                    shapeRenderer.rectLine(startPoint, Near_point,5);
-//                    shapeRenderer.end();
-//                    startPoint=Near_point;
+                        }
 
 
                     }
                 }
             }
         }
-//    private void drawArrow(ShapeRenderer shapeRenderer, float x, float y, float width, float height) {
-//        // Draw a triangle for the arrowhead
-//        shapeRenderer.triangle(x, y, x + width / 2, y + height, x + width, y);
-//
-//        // Draw a rectangle for the arrow body
-//        shapeRenderer.rect(x, y - height / 4, width, height / 2);
-//    }
 
+    /**
+     * @param vector1
+     * @param vector2
+     * @return a direction vector in a form of Vector2
+     */
     public static Vector2 findDirection(Vector2 vector1, Vector2 vector2) {
         // Subtract vector1 from vector2 to get the direction vector
         return vector2.cpy().sub(vector1);
     }
+
+    /**
+     * @param D->is the direction enum val
+     * @return the Direction in terms of a direction vector.
+     */
     public Vector2 getDir(Direction D){
         Vector2 X = null;
         if(D==Direction.EAST){
@@ -3024,6 +2543,13 @@ break;
         }
         return X;
     }
+
+    /**
+     * @param direction
+     * @param startingPoint
+     * @param points
+     * @return the coordinates in terms of rows and columns of the nearest point in direction of the staring point.
+     */
     public static Vector2 findROWDirection(Vector2 direction, Vector2 startingPoint, double[][][] points) {
         float minDistance = Float.MAX_VALUE;
         Vector2 nearestPoint = null;
@@ -3055,6 +2581,13 @@ break;
 
         return row;
     }
+
+    /**
+     * @param direction
+     * @param startingPoint
+     * @param points->3D aaray
+     * @return the nearest point in the 3D array points in the direction from the starting point.
+     */
     public static Vector2 findNearestPointInDirection(Vector2 direction, Vector2 startingPoint, double[][][] points) {
         float minDistance = Float.MAX_VALUE;
         Vector2 nearestPoint = null;
@@ -3084,24 +2617,40 @@ break;
 
         return nearestPoint;
     }
+
+    /**
+     * @param H
+     * @return true if the atom is in H vector, else returns false.
+     */
     public boolean Find_atom(Vector2 H) {
         for (int i = 0; i < atoms.length; i++) {
             if (atoms[i].getPosition().x == hexGrid.calculateHexagonPosition(coordinates[(int) H.x][(int) H.y][0], coordinates[(int) H.x][(int) H.y][1]).x && atoms[i].getPosition().y == hexGrid.calculateHexagonPosition(coordinates[(int) H.x][(int) H.y][0], coordinates[(int) H.x][(int) H.y][1]).y ) {
-                System.out.println(atoms[i].getPosition()+","+H);
+                //.out.println(atoms[i].getPosition()+","+H);
                 return true;
             }
         }
         return false;
     }
+
+    /**
+     * @param H
+     * @return true if the start hexagon have the atom
+     */
     public boolean Find_atom_start(Vector2 H) {
         for (int i = 0; i < atoms.length; i++) {
             if (atoms[i].getPosition().x == H.x && atoms[i].getPosition().y ==H.y ) {
-                System.out.println(atoms[i].getPosition()+","+H);
+                //.out.println(atoms[i].getPosition()+","+H);
                 return true;
             }
         }
         return false;
     }
+
+    /**
+     * @param H->current hexagon
+     * @param G->input from dialog box
+     * @return boundry for the hexagon board
+     */
     public boolean Boundry(Vector2 H, int G) {
         if(G==54 || G==47){
             return H.y>=0 && H.y<=rows.get((int) H.x).size()-1 && H.x>0 && H.x<4;
@@ -3116,17 +2665,15 @@ break;
         else{
             return H.y>0 && H.y<rows.get((int) H.x).size()-1 && H.x>0 && H.x<8;
         }
-//            if(Dialog_Input.get(i)>26 && Dialog_Input.get(i)<48){
-//                return H.x < rows.size() && H.y < (rows.get((int) H.x).size()) && H.x > 0 && H.y > 0;
-//
-//            }
-//            else if(Dialog_Input.get(i)>=1 && Dialog_Input.get(i)<20){
-//                return H.x < rows.size() && H.y < (rows.get((int) H.x).size())-1 && H.x >= 0 && H.y >= 0;
-//
-//            }
-//        }
 
     }
+
+    /**
+     * @param direction
+     * @param startingPoint
+     * @param points
+     * @return find the nearest point in a 2D array in the direction
+     */
     public static Vector2 findNearestPointInDir(Vector2 direction, Vector2 startingPoint, double[][] points) {
         float minDistance = Float.MAX_VALUE;
         Vector2 nearestPoint = null;
@@ -3156,6 +2703,13 @@ break;
 
         return nearestPoint;
     }
+
+    /**
+     * @param direction
+     * @param startingPoint
+     * @param points
+     * @return second-nearest point in the direction in the 2D array
+     */
     public static Vector2 findSecondNearestPoint(Vector2 direction, Vector2 startingPoint, double[][] points) {
         Vector2 nearestPoint = null;
         Vector2 secondNearestPoint = null;
@@ -3190,6 +2744,13 @@ break;
 
         return secondNearestPoint;
     }
+
+    /**
+     * @param direction
+     * @param startingPoint
+     * @param points
+     * @return the third-nearest point in direction in the 2D array
+     */
     public static Vector2 findThirdNearestPoint(Vector2 direction, Vector2 startingPoint, double[][] points) {
         Vector2 nearestPoint = null;
         Vector2 secondNearestPoint = null;
@@ -3234,49 +2795,18 @@ break;
 
         return thirdNearestPoint;
     }
+
+    /**
+     * @param batch
+     * @param position
+     * @param Direction
+     */
     public void drawArrow(SpriteBatch batch, Vector2 position,float Direction) {
         batch.begin();
         batch.draw(arrowRegion,position.x-arrowRegion.getRegionHeight(),position.y-arrowRegion.getRegionWidth(),arrowRegion.getRegionWidth()/2f,arrowRegion.getRegionHeight()/2f,arrowRegion.getRegionWidth(),arrowRegion.getRegionHeight(),1,1,Direction);
         batch.end();
     }
-//private void drawArrow(ShapeRenderer shapeRenderer, Vector2 position, float rotationAngle) {
-//    // Define the points of the arrow relative to its position
-//    float arrowWidth = 50;
-//    float arrowHeight = 50;
-//    float tailLength = 50;
-//
-//    // Calculate the coordinates of the arrowhead relative to its position
-//    float arrowHeadX = arrowWidth / 2;
-//    float arrowHeadY = 0;
-//
-//    // Calculate the coordinates of the tail end relative to its position
-//    float tailX = arrowHeadX;
-//    float tailY = -tailLength;
-//
-//    shapeRenderer.identity();
-//    shapeRenderer.translate(position.x, position.y, 0);
-//    shapeRenderer.rotate(0, 0, 1, rotationAngle); // Rotate around arrow's position
-//
-//    // Draw arrowhead
-//    shapeRenderer.triangle(0, 0, arrowHeadX, arrowHeadY, arrowWidth, 0);
-//
-//    // Draw arrow body
-//    shapeRenderer.rectLine(tailX, tailY, tailX, tailY + arrowHeight / 2, 5); // Adjust dimensions as needed
-//}
-private void drawHexagon(float centerX, float centerY, float size) {
-    shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-    shapeRenderer.setColor(Color.BLACK);
-    shapeRenderer.polygon(new float[]{
-            centerX, centerY + size,
-            centerX + HEX_SIZE * 0.866f, centerY + size / 2,
-            centerX + HEX_SIZE * 0.866f, centerY - size / 2,
-            centerX, centerY - size,
-            centerX - HEX_SIZE * 0.866f, centerY - size / 2,
-            centerX - HEX_SIZE * 0.866f, centerY + size / 2
-    });
-    shapeRenderer.end();
-}
+
     @Override
     public void dispose () {
         shapeRenderer.dispose();
